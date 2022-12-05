@@ -6,12 +6,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.Toolkit;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,7 +31,8 @@ import javax.swing.JTextArea;
  *
  * 4) List all the words in alphabetical order
  * 
- * 5) Write the count for each word, e.g. "word word pippo" should output "pippo -> 1, word -> 2"
+ * 5) Write the count for each word, e.g. "word word pippo" should output "pippo
+ * -> 1, word -> 2"
  *
  */
 public final class LambdaFilter extends JFrame {
@@ -49,11 +47,25 @@ public final class LambdaFilter extends JFrame {
         LOWERCASE("Lowercase", String::toLowerCase),
         CHAR_COUNT("Char count", a -> Integer.toString(a.length())),
         LINE_COUNT("Line count", a -> Long.toString(a.chars().filter(s -> s == '\n').count() + 1)),
-        ALPHABETIC("Alphabetic order", a -> Stream.of(a.split(" "))
+        ALPHABETIC("Alphabetic order", a -> Stream.of(a.split("\\W"))
                                                         .sorted()
                                                         .collect(Collectors.joining("\n"))),
-       /*  COUNT_EACH("Count for each word", a ->);*/
+        
+        COUNT_EACH("Count for each word", a ->
+        {
+        final Map<String, Integer> m = new HashMap<>();
+        Stream.of(a.split("\\W")).forEach(w -> {
+            if (m.containsKey(w)) {
+                m.put(w, m.get(w) + 1);
+            } else{
+                m.put(w, 1);
+            }
+         }); 
 
+         return m.entrySet().toString();
+        });
+       
+       
         private final String commandName;
         private final Function<String, String> fun;
 
