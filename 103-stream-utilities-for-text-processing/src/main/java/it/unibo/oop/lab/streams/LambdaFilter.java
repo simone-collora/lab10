@@ -8,7 +8,12 @@ import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,7 +34,7 @@ import javax.swing.JTextArea;
  *
  * 4) List all the words in alphabetical order
  * 
- * 5) Write the count for each word, e.g. "word word pippo" should output "pippo -> 1 word -> 2"
+ * 5) Write the count for each word, e.g. "word word pippo" should output "pippo -> 1, word -> 2"
  *
  */
 public final class LambdaFilter extends JFrame {
@@ -43,10 +48,11 @@ public final class LambdaFilter extends JFrame {
         IDENTITY("No modifications", Function.identity()),
         LOWERCASE("Lowercase", String::toLowerCase),
         CHAR_COUNT("Char count", a -> Integer.toString(a.length())),
-        LINE_COUNT("Line count", a -> Long.toString(a.chars().filter(s -> s == '\n').count() + 1));
-        /*ALPHABETIC("Alphabetic order"),
-        *COUNT_EACH("Count for each word")
-        */
+        LINE_COUNT("Line count", a -> Long.toString(a.chars().filter(s -> s == '\n').count() + 1)),
+        ALPHABETIC("Alphabetic order", a -> Stream.of(a.split(" "))
+                                                        .sorted()
+                                                        .collect(Collectors.joining("\n"))),
+       /*  COUNT_EACH("Count for each word", a ->);*/
 
         private final String commandName;
         private final Function<String, String> fun;
