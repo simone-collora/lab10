@@ -48,26 +48,24 @@ public final class LambdaFilter extends JFrame {
         LOWERCASE("Lowercase", String::toLowerCase),
         CHAR_COUNT("Char count", a -> Integer.toString(a.length())),
         LINE_COUNT("Line count", a -> Long.toString(a.chars().filter(s -> s == '\n').count() + 1)),
-        ALPHABETIC("Alphabetic order", a -> Stream.of(a.split("\\W"))
-                                                        .sorted()
-                                                        .collect(Collectors.joining("\n"))),
-        
-        COUNT_EACH("Count for each word", a ->
-        {
-        final Map<String, Integer> m = new HashMap<>();
-        Stream.of(a.split("\\W")).forEach(w -> {
-            w=w.toLowerCase();
-            if (m.containsKey(w)) {
-                m.put(w, m.get(w) + 1);
-            } else{
-                m.put(w, 1);
-            }
-         }); 
+        ALPHABETIC("Alphabetic order", a -> Stream.of(a.toLowerCase()
+                .split("\\W"))
+                .sorted()
+                .collect(Collectors.joining("\n"))),
+        COUNT_EACH("Count for each word", a -> {
+            final Map<String, Integer> m = new HashMap<>();
+            Stream.of(a.split("\\W")).forEach(w -> {
+                w = w.toLowerCase();
+                if (m.containsKey(w)) {
+                    m.put(w, m.get(w) + 1);
+                } else {
+                    m.put(w, 1);
+                }
+            });
 
-         return m.entrySet().toString();
+            return m.entrySet().toString();
         });
-       
-       
+
         private final String commandName;
         private final Function<String, String> fun;
 
@@ -75,7 +73,6 @@ public final class LambdaFilter extends JFrame {
             commandName = name;
             fun = process;
         }
-        
 
         @Override
         public String toString() {
