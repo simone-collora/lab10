@@ -56,6 +56,7 @@ public final class LambdaFilter extends JFrame {
         {
         final Map<String, Integer> m = new HashMap<>();
         Stream.of(a.split("\\W")).forEach(w -> {
+            w=w.toLowerCase();
             if (m.containsKey(w)) {
                 m.put(w, m.get(w) + 1);
             } else{
