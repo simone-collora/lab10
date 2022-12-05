@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -99,6 +100,8 @@ public final class LambdaFilter extends JFrame {
         final JTextArea right = new JTextArea();
         right.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         right.setEditable(false);
+        right.setLineWrap(true);
+        right.setWrapStyleWord(true);
         centralPanel.add(left);
         centralPanel.add(right);
         panel1.add(centralPanel, BorderLayout.CENTER);
